@@ -4,6 +4,7 @@ import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { disconnect, Types } from 'mongoose';
 import { REVIEW_NOT_FOUND } from '../src/review/review.constans';
+import { AuthDto } from '../src/auth/dto/auth.dto';
 
 const productId = new Types.ObjectId().toHexString();
 
@@ -15,9 +16,15 @@ const testDto = {
   productId,
 };
 
+const loginDto: AuthDto = {
+  login: 'test@gmail.com',
+  password: '12345',
+};
+
 describe('AppController (e2e)', () => {
   let app: INestApplication;
   let reviewId: string;
+  let token: string;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -26,6 +33,11 @@ describe('AppController (e2e)', () => {
 
     app = moduleFixture.createNestApplication();
     await app.init();
+
+    const { body } = await request(app.getHttpServer())
+      .post('/auth/login')
+      .send(loginDto);
+    token = body.access_token;
   });
 
   it('/review/create (POST) - success', async () => {
@@ -35,7 +47,6 @@ describe('AppController (e2e)', () => {
       .expect(201)
       .then(({ body }: request.Response) => {
         reviewId = body._id;
-        console.log(reviewId);
         expect(reviewId).toBeDefined();
       });
   });
@@ -68,12 +79,14 @@ describe('AppController (e2e)', () => {
   it('/review/:id (DELETE) - success', () => {
     return request(app.getHttpServer())
       .delete('/review/' + reviewId)
+      .set('Authorization', 'Bearer ' + token)
       .expect(200);
   });
 
   it('/review/:id (DELETE) - fail', () => {
     return request(app.getHttpServer())
       .delete('/review/' + reviewId)
+      .set('Authorization', 'Bearer ' + token)
       .expect(404, {
         statusCode: 404,
         message: REVIEW_NOT_FOUND,

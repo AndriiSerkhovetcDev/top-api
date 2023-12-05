@@ -9,7 +9,7 @@ export class ProductCharacteristic {
   @Prop()
   value: string;
 }
-@Schema()
+@Schema({ timestamps: true })
 export class ProductModel {
   @Prop()
   image: string;
@@ -21,10 +21,7 @@ export class ProductModel {
   price: number;
 
   @Prop()
-  oldPrice: number;
-
-  @Prop()
-  calculatedRating: number;
+  oldPrice?: number;
 
   @Prop()
   description: string;
@@ -36,7 +33,7 @@ export class ProductModel {
   disAdvantages: string;
 
   @Prop()
-  categories: string;
+  categories: string[];
 
   @Prop([String])
   tags: string[];

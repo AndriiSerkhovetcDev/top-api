@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 
 export type ReviewDocument = HydratedDocument<ReviewModel>;
-@Schema()
+@Schema({ timestamps: true })
 export class ReviewModel {
   @Prop()
   name: string;

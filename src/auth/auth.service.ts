@@ -48,9 +48,9 @@ export class AuthService {
   }
 
   async login(email: string) {
-    const paylod = { email };
+    const payload = { email };
     return {
-      access_token: await this.jwtService.signAsync(paylod),
+      access_token: await this.jwtService.signAsync(payload),
     };
   }
 }
