@@ -15,10 +15,12 @@ import { CreateReviewDto } from './dto/create-review.dto';
 import { REVIEW_NOT_FOUND } from './review.constans';
 import { ReviewService } from './review.service';
 import { JWTAuthGuard } from '../auth/guards/JWTAuthGuard';
+import { IdValidationPipe } from '../pipes/id-validation/id-validation.pipe';
 
 @Controller('review')
 export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
+  @UseGuards(JWTAuthGuard)
   @UsePipes(new ValidationPipe())
   @Post('create')
   async create(@Body() dto: CreateReviewDto) {
@@ -27,7 +29,7 @@ export class ReviewController {
 
   @UseGuards(JWTAuthGuard)
   @Delete(':id')
-  async delete(@Param('id') id: string) {
+  async delete(@Param('id', IdValidationPipe) id: string) {
     const deletedReview = await this.reviewService.delete(id);
 
     if (!deletedReview) {
@@ -36,12 +38,15 @@ export class ReviewController {
   }
 
   @Get('byProduct/:productId')
-  async getByProduct(@Param('productId') productId: string) {
+  async getByProduct(@Param('productId', IdValidationPipe) productId: string) {
     return this.reviewService.findByProduct(productId);
   }
 
+  @UseGuards(JWTAuthGuard)
   @Delete('byProduct/:productId')
-  async deleteByProduct(@Param('productId') productId: string) {
+  async deleteByProduct(
+    @Param('productId', IdValidationPipe) productId: string,
+  ) {
     return this.reviewService.deleteByProduct(productId);
   }
 }
