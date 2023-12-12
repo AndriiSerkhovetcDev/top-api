@@ -1,6 +1,6 @@
 version: '24.0.6'
 services:
-  mongo:
+  top-api:
     image: top-api:latest
     container_name: top-api
     restart: always
