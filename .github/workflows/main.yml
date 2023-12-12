@@ -12,7 +12,7 @@ jobs:
           - name: Publish to registy
             uses: elgohr/Publish-Docker-Github-Action@v5
             with:
-              name: docker.pkg.github.com/${{ github.repository }}/top-api
+              name: ghcr.io/${{ github.repository }}/top-api
               username: ${{ github.actor }}
               password: ${{ secrets.GITHUB_TOKEN }}
               registry: ghcr.io
