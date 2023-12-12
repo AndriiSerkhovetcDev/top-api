@@ -12,8 +12,8 @@ jobs:
           - name: Publish to registy
             uses: elgohr/Publish-Docker-Github-Action@v5
             with:
-              registry: docker.pkg.github.com
               name: docker.pkg.github.com/${{ github.repository }}/top-api
-              username: ${{ secrets.DOCKER_USERNAME }}
-              password: ${{ secrets.DOCKER_PASSWORD }}
+              username: ${{ github.actor }}
+              password: ${{ secrets.GITHUB_TOKEN }}
+              registry: ghcr.io
               tags: "development"
