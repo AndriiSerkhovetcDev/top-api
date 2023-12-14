@@ -46,6 +46,10 @@ export class TopPageService {
       .exec();
   }
 
+  public async findAll(): Promise<TopPageModelDocument[]> {
+    return this.topPageModel.find({}).exec();
+  }
+
   public async deleteById(
     id: string,
   ): Promise<ModifyResult<TopPageModelDocument>> {
